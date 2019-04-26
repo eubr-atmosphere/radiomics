@@ -6,7 +6,7 @@ Created on Mon Apr  1 15:44:51 2019
 @author: quibim
 """
 
-import sys
+import sys, getopt
 import os
 import numpy as np
 import video_frames as vf
@@ -19,8 +19,22 @@ import warnings
 warnings.filterwarnings("ignore")
 
 if __name__ == '__main__':
-    
-    videos_path = sys.argv[1]
+        
+    try:
+       opts, args = getopt.getopt(sys.argv[1:],"hf:",["help=","folder="])
+       
+    except getopt.GetoptError:
+       print('main.py -f <videosfolder>')
+       sys.exit(2)
+       
+    for opt, arg in opts:
+       if opt == '-h':
+          print('main.py -f <videosfolder>')
+          sys.exit()
+       elif opt in ("-f", "--folder"):
+          videos_path = arg
+         
+#    videos_path = sys.argv[1]
     videos = os.listdir(videos_path)
 
     for v in videos:
@@ -37,10 +51,10 @@ if __name__ == '__main__':
             segmentations = []
             anatomics = []
 
-            for f in frames:
+            for fr in frames:
 
                 # 2. Segment colors by frame
-                segmentedImage, anatomicImage = ds.segmentation(f)
+                segmentedImage, anatomicImage = ds.segmentation(fr)
                 
                 segmentations.append(segmentedImage)
                 anatomics.append(anatomicImage)
@@ -51,7 +65,6 @@ if __name__ == '__main__':
             
             else:
                 allTextures = []
-                
                 for s in segmentations:
                     
                     # 4. Texture analysis

@@ -17,3 +17,8 @@ This application focuses on the implementation of the pilot application on Medic
  ## Folders
  
  * classifiers: includes files needed for the view classifier and for the textures classification
+
+
+## Usage
+
+main.py -f videosfolder 
