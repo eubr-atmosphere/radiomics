@@ -47,26 +47,32 @@ def extract_and_anonymise(videos_path,input_v,videos_path_out,output_v):
 if __name__ == '__main__':
         
     try:
-       opts, args = getopt.getopt(sys.argv[1:],"hf:",["help=","folder="])
+       opts, args = getopt.getopt(sys.argv[1:],"hi:o:",["help=","folder=","inputfolder=","outputfolder="])
        
     except getopt.GetoptError:
-       print('main.py -f <videosfolder>')
+       print('main.py -i <inputvideosfolder> -o <output videos folder>')
        sys.exit(2)
        
     for opt, arg in opts:
+       print("opt: %s, arg: %s" % (opt, arg))
        if opt == '-h':
-          print('main.py -f <videosfolder>')
+          print('main.py -i <input videos folder> -o <output videos folder>')
           sys.exit()
-       elif opt in ("-f", "--folder"):
-          videos_path = arg
+       elif opt in ("-i", "--inputfolder"):
+          input_videos_path = arg
+       elif opt in ("-o", "--outputfolder"):
+          output_videos_path = arg
          
-    videos = os.listdir(videos_path)
-    videos_path_out = videos_path + '-anonymised'
+#    print("Input dir: %s" % input_videos_path)
+#    print("Output dir: %s" % output_videos_path)
+
+    videos = os.listdir(input_videos_path)
+    videos_path_out = output_videos_path 
     for v in videos:
         if not v.startswith('.'):
-            file_path=os.path.join(videos_path, v)
+            file_path=os.path.join(input_videos_path, v)
             print('Check %s' % file_path)
             if vf.if_doppler(file_path):
                 hash_object = hashlib.md5(file_path.encode())
                 output_v=hash_object.hexdigest()
-                extract_and_anonymise(videos_path,v,videos_path_out,output_v)
+                extract_and_anonymise(input_videos_path,v,videos_path_out,output_v)
